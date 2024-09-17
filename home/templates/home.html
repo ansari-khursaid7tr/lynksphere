@@ -1,0 +1,329 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ content.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .hero-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100vh; /* Full screen height */
+            background: url('{% static "images/hero-bg.jpg" %}') no-repeat center center;
+            background-size: cover;
+            padding: 0 20px;
+        }
+
+        .hero-content {
+            max-width: 600px; /* Optional: Limit the width of the content to keep it in the center */
+            margin: 0 auto;
+        }
+
+        .typewriter {
+            min-height: 2rem; /* Reserve some space for the typewriter effect */
+            display: inline-block;
+        }
+
+        .menu-item:hover {
+            color: #00ff00; /* Same green as logo */
+        }
+        .footer-text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-text span {
+            margin-right: 10px;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #22577A; /* Green background */
+            color: white;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+        }
+
+        .back-to-top:hover {
+            background-color: #22577A; /* Slightly darker green on hover */
+        }
+
+        @media (min-width: 640px) {
+            .footer-text {
+                flex-direction: row;
+            }
+        }
+        @media (max-width: 640px) {
+            .footer-text {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Navbar -->
+    <header class="fixed w-full bg-gray-800 shadow-lg z-50">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <div class="flex items-center">
+                <a href="/"><img src="{% static 'images/logo.png' %}" alt="LynkSphere Logo" class="h-12 w-auto"></a>
+            </div>
+            <!-- Mobile menu button -->
+            <button id="menu-btn" class="text-white block md:hidden focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- Menu items -->
+            <nav id="menu" class="hidden md:flex md:space-x-8">
+                <a href="#home" class="text-white menu-item font-semibold">Home</a>
+                <a href="#about" class="text-white menu-item font-semibold">About</a>
+                <a href="#services" class="text-white menu-item font-semibold">Services</a>
+                <a href="#products" class="text-white menu-item font-semibold">Products</a>
+                <a href="#contact" class="text-white menu-item font-semibold">Contact</a>
+            </nav>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-gray-800">
+            <a href="#home" class="block py-2 px-4 text-white">Home</a>
+            <a href="#about" class="block py-2 px-4 text-white">About</a>
+            <a href="#services" class="block py-2 px-4 text-white">Services</a>
+            <a href="#products" class="block py-2 px-4 text-white">Products</a>
+            <a href="#contact" class="block py-2 px-4 text-white">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section flex items-center justify-center text-center text-white">
+        <div class="container">
+            <div class="hero-content">
+                <h5 class="text-5xl font-bold mb-6 text-xl mb-8 typewriter"></h5>
+                <br />
+                <br/>
+                <a href="#products" class="px-8 py-3 bg-blue-500 rounded-lg text-white font-semibold hover:bg-blue-600 transition">Explore Our Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-8 md:mb-0">
+                <h2 class="text-3xl font-semibold mb-6 text-gray-800">About Us</h2>
+                <p class="text-lg text-justify text-gray-600 mb-4">{{ content.about_us }}</p>
+                <p class="text-lg text-justify text-gray-600 mb-4">{{ content.about_us2 }}</p>
+                <p class="text-lg text-justify text-gray-600">{{ content.about_us3 }}</p>
+            </div>
+            <div class="md:w-1/2">
+                <img src="{% static 'images/about-us.png' %}" alt="About Us" class="rounded-md">
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-semibold text-center mb-12 text-gray-800">Our Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for service in services %}
+                    <div class="bg-gray-100 p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1">
+                        <h3 class="text-xl font-bold mb-4">{{ service.name }}</h3>
+                        <p class="text-gray-600 mb-6">{{ service.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-semibold text-center mb-12 text-gray-800">Our Products</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for product in products %}
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1">
+                        <h3 class="text-xl font-bold mb-4">{{ product.name }}</h3>
+                        <p class="text-gray-600 mb-6">{{ product.description }}</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <strong>Features:</strong>
+                            {% for feature in product.features_list %}
+                                <li><i class="fas fa-check-circle text-blue-500"></i> {{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Add Carousel functionality for > 3 products -->
+            {% if products|length > 3 %}
+            <div class="mt-10 swiper-container">
+                <div class="swiper-wrapper">
+                    {% for product in products %}
+                        <div class="swiper-slide">
+                            <!-- Product card in the slide -->
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+<section id="contact" class="py-20 bg-white">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-start">
+        <!-- Contact Information -->
+        <div class="md:w-1/2 mb-8 md:mb-0">
+            <h2 class="text-3xl font-semibold mb-6 text-gray-800">Get In Touch</h2>
+            <p class="text-lg text-gray-600 mb-4">{{ content.contact_header_text }}</p>
+            <div class="space-y-4">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-map-marker-alt text-gray-800"></i>
+                    <p class="text-gray-800">{{ content.contact_address }}</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-envelope text-gray-800"></i>
+                    <p class="text-gray-800">{{ content.contact_email }}</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-phone-alt text-gray-800"></i>
+                    <p class="text-gray-800">{{ content.contact_phone }}</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://facebook.com" class="text-gray-800"><i class="fab fa-facebook text-gray-800"></i></a>
+                    <a href="https://twitter.com" class="text-gray-800"><i class="fab fa-twitter text-gray-800"></i></a>
+                    <a href="https://instagram.com" class="text-gray-800"><i class="fab fa-instagram text-gray-800"></i></a>
+                    <a href="https://linkedin.com" class="text-gray-800"><i class="fab fa-linkedin text-gray-800"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="md:w-1/2">
+            <form action="{% url 'home' %}" method="post" class="bg-gray-100 p-8 rounded-lg shadow-md">
+                {% csrf_token %}
+
+                <div class="mb-6">
+                    <label for="name" class="block text-gray-700 text-lg font-semibold mb-2">Full Name</label>
+                    <input type="text" name="name" class="w-full p-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out shadow-sm hover:shadow-md" placeholder="Your Name">
+                </div>
+
+                <div class="mb-6">
+                    <label for="email" class="block text-gray-700 text-lg font-semibold mb-2">Email Address</label>
+                    <input type="email" name="email" class="w-full p-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out shadow-sm hover:shadow-md" placeholder="Email Address">
+                </div>
+
+                <div class="mb-6">
+                    <label for="message" class="block text-gray-700 text-lg font-semibold mb-2">Message</label>
+                    <textarea name="message" rows="5" class="w-full p-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out shadow-sm hover:shadow-md" placeholder="Your Message"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out shadow-md">Send Message</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-8 text-white">
+        <div class="container mx-auto flex flex-col items-center">
+            <p class="mb-4">&copy; 2024 {{ content.title }}. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Go to Top Button -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i> <!-- Simple arrow icon -->
+    </button>
+
+
+    <!-- Swiper.js for carousel functionality -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+    const quotes = [
+        "Technology is best when it brings people together.",
+        "The science of today is the technology of tomorrow.",
+        "Any sufficiently advanced technology is indistinguishable from magic."
+    ];
+
+    let quoteIndex = 0;
+    let charIndex = 0;
+    const typingSpeed = 100;
+    const quoteContainer = document.querySelector('.typewriter');
+
+    function typeQuote() {
+        if (charIndex < quotes[quoteIndex].length) {
+            quoteContainer.textContent += quotes[quoteIndex].charAt(charIndex);
+            charIndex++;
+            setTimeout(typeQuote, typingSpeed);
+        } else {
+            setTimeout(deleteQuote, 5000); // Pause before deleting
+        }
+    }
+
+    function deleteQuote() {
+        if (charIndex > 0) {
+            quoteContainer.textContent = quotes[quoteIndex].substring(0, charIndex - 1);
+            charIndex--;
+            setTimeout(deleteQuote, typingSpeed / 2);
+        } else {
+            quoteIndex = (quoteIndex + 1) % quotes.length; // Move to the next quote
+            setTimeout(typeQuote, 500);
+        }
+    }
+
+    typeQuote(); // Start the typewriter effect
+
+        const swiper = new Swiper('.swiper-container', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+
+        // Back to Top functionality
+        const backToTopButton = document.getElementById('backToTop');
+        window.onscroll = function() {
+            if (document.documentElement.scrollHeight - window.scrollY <= window.innerHeight) {
+                backToTopButton.style.display = 'flex';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        };
+
+        backToTopButton.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+
+        // Navbar mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>
